@@ -12,45 +12,10 @@ trigger:
    exclude:
      - contracts/*
 
-# pool:
-#   vmImage: 'windows-latest'
-# jobs:
-#   - job: Linux
-#     pool:
-#       vmImage: 'ubuntu-latest'
-#     steps:
-#     - script: echo hello from Linux
-#   - job: macOS
-#     pool:
-#       vmImage: 'macOS-latest'
-#     steps:
-#     - script: echo hello from macOS
-#   - job: Windows
-#     pool:
-#       vmImage: 'windows-latest'
-#     steps:
-#     - script: echo hello from Windows
-
-variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-
-stages:
- - stage: 'Build'
-   dependsOn: []
-   jobs:
-     - job: 'Build'
-       pool: 
-        vmImage: 'windows-latest'
-       steps:
-       - task: NuGetToolInstaller@1
-       - task: NuGetCommand@2
-         inputs:
-          restoreSolution: '$(solution)'
-       - task: VSBuild@1
-         inputs:
-          solution: '$(solution)'
-          msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-          platform: '$(buildPlatform)'
-          configuration: '$(buildConfiguration)'
+steps:
+- task: UseDotNet@2
+  displayName: 'Install net core SDK'
+  inputs:
+    packageType: 'sdk'
+    version: 3.0
+  
