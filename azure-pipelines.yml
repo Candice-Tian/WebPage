@@ -17,5 +17,5 @@ steps:
   displayName: 'Install net core SDK'
   inputs:
     packageType: 'sdk'
-    version: 3.0
+    version: '3.0'
   
