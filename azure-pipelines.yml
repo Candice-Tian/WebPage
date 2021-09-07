@@ -13,12 +13,12 @@ trigger:
      - contracts/*
 
 steps:
-- task: UseDotNet@2
-  displayName: 'Install net core SDK'
-  inputs:
-    packageType: 'sdk'
-    version: '5.0'
-    includePreviewVersions: true
+# - task: UseDotNet@2
+#   displayName: 'Install net core SDK'
+#   inputs:
+#     packageType: 'sdk'
+#     version: '5.0'
+#     includePreviewVersions: true
 
 - task: DotNetCoreCLI@2
   displayName: 'Build the project'
