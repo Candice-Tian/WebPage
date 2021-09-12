@@ -14,9 +14,14 @@ trigger:
 
 steps:
 - task: DotNetCoreCLI@2
-  displayName: 'Build the project'
   inputs:
     command: 'build'
-    projects: 'WebPage//MVCPage/MVCPage.csproj'
-
-  
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+    nuGetFeedType: 'internal'
+- task: DotNetCoreCLI@2
+  inputs:
+   command: 'publish'
+   publishWebProjects: true
