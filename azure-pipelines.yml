@@ -47,4 +47,10 @@ steps:
     arguments: '-o $(Build.ArtifactStagingDirectory)/Output'
     zipAfterPublish: true
     modifyOutputPath: true
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+ 
+
  
