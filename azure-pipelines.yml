@@ -12,16 +12,12 @@ trigger:
    exclude:
      - contracts/*
 
+
 steps:
-- task: DotNetCoreCLI@2
+- task: UseDotNet@2
+  displayName: 'Use .NET Core sdk'
   inputs:
-    command: 'build'
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-    nuGetFeedType: 'internal'
-- task: DotNetCoreCLI@2
-  inputs:
-   command: 'publish'
-   publishWebProjects: true
+    packageType: sdk
+ #请选择是仅安装运行时还是 SDK 
+    version: 3.1.402
+    installationPath: $(Agent.ToolsDirectory)/dotnet
