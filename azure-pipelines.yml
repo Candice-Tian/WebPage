@@ -11,6 +11,13 @@ trigger:
   paths:
    exclude:
      - contracts/*
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
 
 
 steps:
@@ -48,9 +55,20 @@ steps:
     zipAfterPublish: true
     modifyOutputPath: true
 
-- task: DotNetCoreCLI@2
+
+- task: VSTest@2
   inputs:
-    command: 'test'
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: |
+      **\*test*.dll
+      !**\*TestAdapter.dll
+      !**\obj\**
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+    
+# - task: DotNetCoreCLI@2
+#   inputs:
+#     command: 'test'
+#     configuration: '$(buildConfiguration)'
  
 
  
