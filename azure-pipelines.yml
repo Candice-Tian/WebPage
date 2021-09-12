@@ -27,17 +27,13 @@ steps:
     command: 'build'
     projects: '**/*.csproj'
 
-- task: DotNetCoreCLI@2
-  displayName: 'pack'
-  inputs: 
-    command: 'pack'
-    outputDir: '$(Build.ArtifactStagingDirectory)/TestDir'
 
-- task: NuGetCommand@2
+- task: DotNetCoreCLI@2
+  displayName: 'Package'
   inputs:
     command: 'pack'
     packagesToPack: '**/*.csproj'
-    packDestination: '$(Build.ArtifactStagingDirectory)'
+    versioningScheme: 'off'
 - task: DotNetCoreCLI@2
   displayName: 'dotnet publish'
   inputs:
