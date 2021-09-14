@@ -56,20 +56,20 @@ steps:
     modifyOutputPath: true
 
 
-- task: VSTest@2
-  inputs:
-    testSelector: 'testAssemblies'
-    testAssemblyVer2: |
-      **\*test*.dll
-      !**\*TestAdapter.dll
-      !**\obj\**
-    searchFolder: '$(System.DefaultWorkingDirectory)'
-    
-# - task: DotNetCoreCLI@2
+# - task: VSTest@2
 #   inputs:
-#     command: test
-#     projects: '**/*Test*.csproj'
-#     arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+#     testSelector: 'testAssemblies'
+#     testAssemblyVer2: |
+#       **\*test*.dll
+#       !**\*TestAdapter.dll
+#       !**\obj\**
+#     searchFolder: '$(System.DefaultWorkingDirectory)'
+    
+- task: DotNetCoreCLI@2
+  inputs:
+    command: test
+    projects: '**/*Test*.csproj'
+    arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
  
 - task: PublishBuildArtifacts@1
   inputs:
