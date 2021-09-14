@@ -1,0 +1,45 @@
+﻿<Properties StartupConfiguration="{B4976D94-6552-423A-BAB2-1652566400D7}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Test/UnitTest1.cs">
+    <Files>
+      <File FileName="UnitTestProject1/UnitTest1.cs" Line="12" Column="12" />
+      <File FileName="Test/UnitTest1.cs" Line="18" Column="1" />
+      <File FileName="MVCPage/BLL/AddMethod.cs" Line="4" Column="27" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="MVCPage" expanded="True">
+            <Node name="MVCPage" expanded="True">
+              <Node name="Dependencies" expanded="True">
+                <Node name="PackageDependencies" expanded="True" />
+              </Node>
+              <Node name="BLL" expanded="True" />
+            </Node>
+            <Node name="Test" expanded="True">
+              <Node name="UnitTest1.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+      <Pad Id="MonoDevelop.UnitTesting.TestPad">
+        <State name="__root__">
+          <Node name="MVCPage" expanded="True">
+            <Node name="Test" selected="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/tiantian.zhao/Code/WebPage/UnitTestProject/UnitTest1.cs" relfile="UnitTestProject/UnitTest1.cs" line="15" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.MVCPage PreferredExecutionTarget="/Applications/Safari.app" />
+</Properties>
