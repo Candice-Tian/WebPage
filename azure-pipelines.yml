@@ -86,9 +86,10 @@ jobs:
     displayName: 'NuGet Authenticate'
   - task: NuGetCommand@2
     inputs:
-      command: 'pack'
+      command: pack
       packagesToPack: '**/*.csproj'
-      versioningScheme: 'off'
+      packDestination: '$(Build.ArtifactStagingDirectory)'
+
   - task: NuGetCommand@2
     inputs:
       command: 'push'
