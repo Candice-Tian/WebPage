@@ -19,63 +19,79 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
-
-steps:
-- task: UseDotNet@2
-  displayName: 'Use .NET Core sdk'
-  inputs:
-    packageType: sdk
- #请选择是仅安装运行时还是 SDK 
-    version: 3.1.402
-    installationPath: $(Agent.ToolsDirectory)/dotnet
-- task: DotNetCoreCLI@2
-  displayName: 'Build'
-  inputs:
-    command: 'build'
-    projects: '**/*.csproj'
-
-
-- task: DotNetCoreCLI@2
-  displayName: 'Package'
-  inputs:
-    command: 'pack'
-    packagesToPack: '**/*.csproj'
-    nobuild: true
-    versioningScheme: 'byPrereleaseNumber'
-    majorVersion: '1'
-    minorVersion: '0'
-    patchVersion: '0'
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet publish'
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: '**/MVCPage.csproj'
-    arguments: '-o $(Build.ArtifactStagingDirectory)'
-    zipAfterPublish: true
-    modifyOutputPath: true
+jobs:
+- job: BuildAndRelease
+  steps:
+  - task: UseDotNet@2
+    displayName: 'Use .NET Core sdk'
+    inputs:
+      packageType: sdk
+  #请选择是仅安装运行时还是 SDK 
+      version: 3.1.402
+      installationPath: $(Agent.ToolsDirectory)/dotnet
+  - task: DotNetCoreCLI@2
+    displayName: 'Build'
+    inputs:
+      command: 'build'
+      projects: '**/*.csproj'
 
 
-# - task: VSTest@2
-#   inputs:
-#     testSelector: 'testAssemblies'
-#     testAssemblyVer2: |
-#       **\*test*.dll
-#       !**\*TestAdapter.dll
-#       !**\obj\**
-#     searchFolder: '$(System.DefaultWorkingDirectory)'
-    
-- task: DotNetCoreCLI@2
-  displayName: 'Test'
-  inputs:
-    command: test
-    projects: '**/*Test*.csproj'
-    arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
- 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+  - task: DotNetCoreCLI@2
+    displayName: 'Package'
+    inputs:
+      command: 'pack'
+      packagesToPack: '**/*.csproj'
+      nobuild: true
+      versioningScheme: 'byPrereleaseNumber'
+      majorVersion: '1'
+      minorVersion: '0'
+      patchVersion: '0'
 
- 
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet publish'
+    inputs:
+      command: 'publish'
+      publishWebProjects: false
+      projects: '**/MVCPage.csproj'
+      arguments: '-o $(Build.ArtifactStagingDirectory)'
+      zipAfterPublish: true
+      modifyOutputPath: true
+
+
+  # - task: VSTest@2
+  #   inputs:
+  #     testSelector: 'testAssemblies'
+  #     testAssemblyVer2: |
+  #       **\*test*.dll
+  #       !**\*TestAdapter.dll
+  #       !**\obj\**
+  #     searchFolder: '$(System.DefaultWorkingDirectory)'
+      
+  - task: DotNetCoreCLI@2
+    displayName: 'Test'
+    inputs:
+      command: test
+      projects: '**/*Test*.csproj'
+      arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+  
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: 'drop'
+      publishLocation: 'Container'
+
+- job: Push
+  steps:
+  - task: NuGetAuthenticate@0
+    displayName: 'NuGet Authenticate'
+
+  - task: NuGetCommand@2
+    inputs:
+      command: 'push'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+      nuGetFeedType: 'internal'
+      publishVstsFeed: '59c8d1c6-6626-4ae7-996f-56fec55e75a1'
+      allowPackageConflicts: true
+
+
+  
