@@ -82,6 +82,9 @@ jobs:
 
 - job: Push
   steps:
+  - task: DotNetCoreCLI@2
+    inputs:
+     command: 'build'
   - task: NuGetAuthenticate@0
     displayName: 'NuGet Authenticate'
   - task: NuGetCommand@2
