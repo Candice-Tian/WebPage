@@ -58,14 +58,6 @@ jobs:
       modifyOutputPath: true
 
 
-  # - task: VSTest@2
-  #   inputs:
-  #     testSelector: 'testAssemblies'
-  #     testAssemblyVer2: |
-  #       **\*test*.dll
-  #       !**\*TestAdapter.dll
-  #       !**\obj\**
-  #     searchFolder: '$(System.DefaultWorkingDirectory)'
       
   - task: DotNetCoreCLI@2
     displayName: 'Test'
@@ -82,15 +74,18 @@ jobs:
 
 - job: Push
   steps:
-  - task: DotNetCoreCLI@2
+  - task: NuGetCommand@2
     inputs:
-     command: 'build'
+      command: 'restore'
+      restoreSolution: '**/*.sln'
+      feedsToUse: 'select'
   - task: NuGetAuthenticate@0
     displayName: 'NuGet Authenticate'
   - task: NuGetCommand@2
     inputs:
-      command: pack
-      packagesToPack: '**/*.csproj'
+      command: 'pack'
+      packagesToPack: '**\*.csproj;!**\*.Tests.csproj'
+      versioningScheme: 'off'
       packDestination: '$(Build.ArtifactStagingDirectory)'
 
   - task: NuGetCommand@2
