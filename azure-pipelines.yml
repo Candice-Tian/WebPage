@@ -84,14 +84,16 @@ jobs:
   steps:
   - task: NuGetAuthenticate@0
     displayName: 'NuGet Authenticate'
-
+  - task: NuGetCommand@2
+    inputs:
+      command: 'pack'
+      packagesToPack: '**/*.csproj'
+      versioningScheme: 'off'
   - task: NuGetCommand@2
     inputs:
       command: 'push'
       packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
       nuGetFeedType: 'internal'
-      publishVstsFeed: '59c8d1c6-6626-4ae7-996f-56fec55e75a1'
-      allowPackageConflicts: true
 
 
   
