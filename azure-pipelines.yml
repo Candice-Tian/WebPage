@@ -30,23 +30,15 @@ jobs:
       feedsToUse: 'select'
   - task: NuGetAuthenticate@0
     displayName: 'NuGet Authenticate'
-  
-  - task: DotNetCoreCLI@2
-    displayName: 'dotnet build'
-    inputs:
-      command: 'build'
-      arguments: '--configuration $(buildConfiguration)'
-      projects: '**/*.sln'
+
+
 
   - task: DotNetCoreCLI@2
-    displayName: "dotnet pack"
     inputs:
       command: 'pack'
-      arguments: '--configuration $(buildConfiguration)'
       packagesToPack: '**/*.csproj;!**/*.Tests.csproj'
-      nobuild: true
+      packDirectory: '$(System.DefaultWorkingDirectory)'
       versioningScheme: 'off'
-
   - task: NuGetCommand@2
     displayName: 'nuget push'
     inputs:
