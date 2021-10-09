@@ -12,7 +12,7 @@ trigger:
    exclude:
      - contracts/*
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'mac'
 
 variables:
   solution: '**/*.sln'
@@ -20,57 +20,6 @@ variables:
   buildConfiguration: 'Release'
 
 jobs:
-- job: BuildAndRelease
-  steps:
-  - task: UseDotNet@2
-    displayName: 'Use .NET Core sdk'
-    inputs:
-      packageType: sdk
-  #请选择是仅安装运行时还是 SDK 
-      version: 3.1.402
-      installationPath: $(Agent.ToolsDirectory)/dotnet
-  - task: DotNetCoreCLI@2
-    displayName: 'Build'
-    inputs:
-      command: 'build'
-      projects: '**/*.csproj'
-
-
-  - task: DotNetCoreCLI@2
-    displayName: 'Package'
-    inputs:
-      command: 'pack'
-      packagesToPack: '**/*.csproj'
-      nobuild: true
-      versioningScheme: 'byPrereleaseNumber'
-      majorVersion: '1'
-      minorVersion: '0'
-      patchVersion: '0'
-
-  - task: DotNetCoreCLI@2
-    displayName: 'dotnet publish'
-    inputs:
-      command: 'publish'
-      publishWebProjects: false
-      projects: '**/MVCPage.csproj'
-      arguments: '-o $(Build.ArtifactStagingDirectory)'
-      zipAfterPublish: true
-      modifyOutputPath: true
-
-
-      
-  - task: DotNetCoreCLI@2
-    displayName: 'Test'
-    inputs:
-      command: test
-      projects: '**/*Test*.csproj'
-      arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
-  
-  - task: PublishBuildArtifacts@1
-    inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      ArtifactName: 'drop'
-      publishLocation: 'Container'
 
 - job: Push
   steps:
@@ -81,18 +30,14 @@ jobs:
       feedsToUse: 'select'
   - task: NuGetAuthenticate@0
     displayName: 'NuGet Authenticate'
-  - task: NuGetCommand@2
+  
+  - task: DotNetCoreCLI@2
     inputs:
-      command: 'pack'
-      packagesToPack: '**\*.csproj;!**\*.Tests.csproj'
-      versioningScheme: 'off'
-      packDestination: '$(Build.ArtifactStagingDirectory)'
-
-  - task: NuGetCommand@2
+      command: 'build'
+  - task: DotNetCoreCLI@2
     inputs:
       command: 'push'
-      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
       nuGetFeedType: 'internal'
-
 
   
