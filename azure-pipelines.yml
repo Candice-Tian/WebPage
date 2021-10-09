@@ -12,7 +12,7 @@ trigger:
    exclude:
      - contracts/*
 pool:
-  vmImage: 'mac'
+   vmImage: 'windows-latest'
 
 variables:
   solution: '**/*.sln'
@@ -32,12 +32,30 @@ jobs:
     displayName: 'NuGet Authenticate'
   
   - task: DotNetCoreCLI@2
+    displayName: 'dotnet build'
     inputs:
       command: 'build'
+      arguments: '--configuration $(buildConfiguration)'
+      projects: '**/*.sln'
+
   - task: DotNetCoreCLI@2
+    displayName: "dotnet pack"
+    inputs:
+      command: 'pack'
+      arguments: '--configuration $(buildConfiguration)'
+      packagesToPack: '**/*.csproj;!**/*.Tests.csproj'
+      nobuild: true
+      versioningScheme: 'off'
+
+  - task: NuGetCommand@2
+    displayName: 'nuget push'
     inputs:
       command: 'push'
-      packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+      feedsToUse: 'select'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
       nuGetFeedType: 'internal'
+      publishVstsFeed: 'TestFeed'
+      versioningScheme: 'off'
+      allowPackageConflicts: true
 
   
