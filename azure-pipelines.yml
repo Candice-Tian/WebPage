@@ -33,29 +33,12 @@ jobs:
 
 
 
+ 
   - task: DotNetCoreCLI@2
     inputs:
-      command: 'pack'
-      packagesToPack: '**/*.csproj;!**/*.Tests.csproj'
-      packDirectory: '$(System.DefaultWorkingDirectory)'
-      versioningScheme: 'off'
-  - task: NuGetCommand@2
-    displayName: 'nuget push'
-    inputs:
-      command: 'push'
-      feedsToUse: 'select'
-      packagesToPush: '$(System.DefaultWorkingDirectory)/**/*.nupkg;!$(System.DefaultWorkingDirectory)/**/*.symbols.nupkg'
-      nuGetFeedType: 'internal'
-      publishVstsFeed: 'TestFeed'
-      versioningScheme: 'off'
-      allowPackageConflicts: true
-  - task: NuGetCommand@2
-    displayName: 'nuget push'
-    inputs:
-      command: 'restore'
-      restoreSolution: '**/*.sln'
-      feedsToUse: 'select'
-      vstsFeed: '40ad2fc0-aab6-4429-9ed3-153813e66de6/3eea94e8-de7d-4d79-83fc-9f5629a8d2f8'
+      command: 'build'
+      projects: '**/*.csproj;!**/*.Tests.csproj'
+      
   - task: NuGetCommand@2
     inputs:
       command: 'pack'
@@ -64,7 +47,7 @@ jobs:
   - task: NuGetCommand@2
     inputs:
       command: 'push'
-      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+      packagesToPush: '$(Pipeline.Workspace)/**/drop/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
       nuGetFeedType: 'internal'
       
    
